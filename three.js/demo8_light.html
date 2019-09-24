@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset=utf-8>
+  <title>Light</title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+
+<body onload="init()">
+  <script src="./three.js"></script>
+  <script>      
+  var renderer, camera, scene, geometry, material, mesh;    
+  function initRenderer() {
+    renderer = new THREE.WebGLRenderer(); //实例化渲染器        
+    renderer.setSize(window.innerWidth, window.innerHeight); //设置宽和高        
+    document.body.appendChild(renderer.domElement); //renderer.domElement 是在实例化渲染器时生成的一个 Canvas 画布，
+    //渲染器渲染界面生成的内容，都将在这个画布上显示。所以，我们将这个画布添加到了 DOM 当中，来显示渲染的内容。 
+  }      
+  function initScene() {
+    scene = new THREE.Scene(); //实例化场景    
+  }       
+  function initCamera() {
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200); //实例化相机        
+    camera.position.set(0, 0, 15);   // 相机的位置 
+  }      
+  function initMesh() {
+    geometry = new THREE.BoxGeometry( 2, 2, 2 ); //创建几何体
+    material = new THREE.MeshLambertMaterial(); //创建材质
+    mesh = new THREE.Mesh( geometry, material ); //创建网格
+    scene.add( mesh ); //将网格添加到场景    
+  } 
+  
+  //创建灯光
+  function initLight() {
+      var light = new THREE.DirectionalLight(0xffffff); //添加了一个白色的平行光
+      light.position.set(20, 50, 50); //设置光的方向
+      scene.add(light); //添加到场景
+
+      //添加一个全局环境光
+      scene.add(new THREE.AmbientLight(0x222222));
+  }
+
+  function animate() {
+    requestAnimationFrame(animate); //循环调用函数
+    mesh.rotation.x += 0.01; //每帧网格模型的沿x轴旋转0.01弧度 
+    mesh.rotation.y += 0.02; //每帧网格模型的沿y轴旋转0.02弧度
+    renderer.render( scene, camera ); //渲染界面    
+  }    
+  //初始化函数，页面加载完成是调用    
+  function init() {
+    initRenderer(); // 初始化渲染器
+    initScene(); // 初始化场景
+    initCamera(); // 初始化相机
+    //initLight();
+    initMesh(); // 添加模型
+    animate();    // 添加动画
+  }
+</script>
+</body>
+
+</html>
